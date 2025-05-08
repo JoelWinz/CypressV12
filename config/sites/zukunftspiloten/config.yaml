@@ -1,0 +1,152 @@
+base: 'https://zukunftspiloten.vdi.de'
+baseVariants:
+  -
+    base: 'https://zukunftspiloten-12-staging.vdi.de/'
+    condition: 'getenv("ENVIRONMENT") == "STAGE"'
+  -
+    base: 'https://zukunftspiloten.vdi-website-v12.ddev.site/'
+    condition: 'getenv("ENVIRONMENT") == "DDEV"'
+errorHandling:
+  -
+    errorCode: 404
+    errorHandler: Page
+    errorContentSource: 't3://page?uid=6219'
+flux_content_types: ''
+flux_page_templates: ''
+languages:
+  -
+    title: German
+    enabled: true
+    languageId: 0
+    base: /
+    typo3Language: de
+    locale: de_DE
+    iso-639-1: de
+    navigationTitle: DE
+    hreflang: de-DE
+    direction: ltr
+    flag: de
+    solr_core_read: core_de
+rootPageId: 5955
+routeEnhancers:
+  EventPlugin:
+    type: Extbase
+    limitToPages:
+      - 6143
+      - 6145
+    extension: SfEventMgt
+    plugin: Pievent
+    routes:
+      -
+        routePath: '/seite/{page}'
+        _controller: 'Event::list'
+        _arguments:
+          page: '@widget_0/currentPage'
+      -
+        routePath: '/{event_title}'
+        _controller: 'Event::detail'
+        _arguments:
+          event_title: event
+      -
+        routePath: '/{event_title}/ical'
+        _controller: 'Event::icalDownload'
+        _arguments:
+          event_title: event
+      -
+        routePath: '/{event_title}'
+        _controller: 'Event::registration'
+        _arguments:
+          event_title: event
+      -
+        routePath: '/anmeldung-speichern/{event_title}'
+        _controller: 'Event::saveRegistration'
+        _arguments:
+          event_title: event
+      -
+        routePath: '/anmeldeergebnis-speichern/{eventuid}/{save_registration_result}/{hmac}'
+        _controller: 'Event::saveRegistrationResult'
+        _arguments:
+          eventuid: eventuid
+          result: result
+          hmac: hmac
+      -
+        routePath: '/anmeldung-bestaetigen/{reguid}/{hmac}'
+        _controller: 'Event::confirmRegistration'
+        _arguments:
+          reguid: reguid
+          hmac: hmac
+      -
+        routePath: '/anmeldung-stornieren/{reguid}/{hmac}'
+        _controller: 'Event::cancelRegistration'
+        _arguments:
+          reguid: reguid
+          hmac: hmac
+      -
+        routePath: '/veranstaltungsort/{location_title}'
+        _controller: 'Event::list'
+        _arguments:
+          location_title: overwriteDemand/location
+      -
+        routePath: '/referent/{speaker_name}'
+        _controller: 'Event::list'
+        _arguments:
+          speaker_name: overwriteDemand/speaker
+      -
+        routePath: '/organisator/{speaker_name}'
+        _controller: 'Event::list'
+        _arguments:
+          organisator_name: overwriteDemand/organisator
+    defaultController: 'Event::list'
+    defaults:
+      page: '0'
+    requirements:
+      page: \d+
+      eventuid: \d+
+      reguid: \d+
+      result: '[0-8]'
+      hmac: '^[a-zA-Z0-9]{40}$'
+    aspects:
+      eventuid:
+        type: PersistedAliasMapper
+        tableName: tx_sfeventmgt_domain_model_event
+        routeFieldName: uid
+      reguid:
+        type: PersistedAliasMapper
+        tableName: tx_sfeventmgt_domain_model_registration
+        routeFieldName: uid
+      page:
+        type: StaticRangeMapper
+        start: '1'
+        end: '1000'
+      event_title:
+        type: PersistedAliasMapper
+        tableName: tx_sfeventmgt_domain_model_event
+        routeFieldName: slug
+      location_title:
+        type: PersistedAliasMapper
+        tableName: tx_sfeventmgt_domain_model_location
+        routeFieldName: slug
+      speaker_name:
+        type: PersistedAliasMapper
+        tableName: tx_sfeventmgt_domain_model_speaker
+        routeFieldName: slug
+      organisator_name:
+        type: PersistedAliasMapper
+        tableName: tx_sfeventmgt_domain_model_organisator
+        routeFieldName: slug
+routes:
+  -
+    route: sitemap.xml
+    type: uri
+    source: 't3://page?uid=6217&type=1533906435'
+  -
+    route: robots.txt
+    type: staticText
+    content: "Sitemap: https://zukunftspiloten.vdi.de/sitemap.xml\nUser-agent: *\nAllow: /\nDisallow: /typo3/\nDisallow: /Hyphenopoly/\nDisallow: /typo3temp/\nDisallow: /uploads/\nDisallow: /fileadmin/\n"
+solr_enabled_read: true
+solr_host_read: '%env(EXTENSIONS_SOLR_HOST)%'
+solr_path_read: '%env(EXTENSIONS_SOLR_PATH)%'
+solr_port_read: '%env(EXTENSIONS_SOLR_PORT)%'
+solr_scheme_read: '%env(EXTENSIONS_SOLR_SCHEME)%'
+solr_use_write_connection: false
+websiteTitle: ''

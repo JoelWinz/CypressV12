@@ -1,0 +1,119 @@
+base: 'https://www.vdi.de/'
+baseVariants:
+  -
+    base: 'https://12-staging.vdi.de/'
+    condition: 'getenv("ENVIRONMENT") == "STAGE"'
+  -
+    base: 'https://vdi-website-v12.ddev.site/'
+    condition: 'getenv("ENVIRONMENT") == "DDEV"'
+errorHandling:
+  -
+    errorCode: 404
+    errorHandler: Page
+    errorContentSource: 't3://page?uid=4475'
+  -
+    errorCode: 403
+    errorHandler: PHP
+    errorPhpClassFQCN: WFP3\Vdi\PageHandler\AccessDeniedHandler
+flux_content_types: ''
+flux_page_templates: ''
+languages:
+  -
+    title: Deutsch
+    enabled: true
+    languageId: 0
+    base: /
+    typo3Language: de
+    locale: de_DE.utf8
+    iso-639-1: de
+    navigationTitle: German
+    hreflang: de-DE
+    direction: ltr
+    flag: de
+    solr_core_read: core_de
+  -
+    title: English
+    enabled: true
+    languageId: 1
+    base: /en/
+    typo3Language: default
+    locale: en_US.UTF-8
+    iso-639-1: en
+    navigationTitle: ''
+    hreflang: ''
+    direction: ''
+    fallbackType: strict
+    fallbacks: ''
+    flag: en-us-gb
+    solr_core_read: core_de
+rootPageId: 1
+routeEnhancers:
+  DoubleOptInApproval:
+    type: Extbase
+    limitToPages:
+      - 5319
+    extension: VdiEvents
+    plugin: DoubleOptInApproval
+    routes:
+      -
+        routePath: '/bestaetigen/{token}'
+        _controller: 'Registration::approveDoubleOptIn'
+        _arguments:
+          page: '@widget_0/currentPage'
+    defaultController: 'Registration::approveDoubleOptIn'
+    requirements:
+      token: '^[a-zA-Z0-9]{40}$'
+  LeadApprovalPlugin:
+    type: Extbase
+    limitToPages:
+      - 4935
+    extension: VdiPublications
+    plugin: LeadApproval
+    routes:
+      -
+        routePath: '/{token}'
+        _controller: 'Lead::approve'
+        _arguments:
+          token: token
+      -
+        routePath: '/{token}/precheck/{precheck}'
+        _controller: 'Lead::approve'
+        _arguments:
+          token: token
+          precheck: precheck
+    defaultController: 'Lead::approve'
+    requirements:
+      url: '^[a-zA-Z0-9]{40}$'
+routes:
+  -
+    route: sitemap.xml
+    type: uri
+    source: 't3://page?uid=4463&type=1533906435'
+  -
+    route: robots.txt
+    type: staticText
+    content: "Sitemap: https://www.vdi.de/sitemap.xml\r\nUser-agent: *\r\nAllow: /\r\nDisallow: /typo3/\r\nDisallow: /Hyphenopoly/\r\nDisallow: /typo3temp/\r\nDisallow: /uploads/\r\nDisallow: /fileadmin/"
+solr_enabled_read: true
+solr_host_read: '%env(EXTENSIONS_SOLR_HOST)%'
+solr_path_read: '%env(EXTENSIONS_SOLR_PATH)%'
+solr_port_read: '%env(EXTENSIONS_SOLR_PORT)%'
+solr_scheme_read: '%env(EXTENSIONS_SOLR_SCHEME)%'
+solr_use_write_connection: false
+websiteTitle: VDI
+imports:
+  -
+    resource: "EXT:nnrestapi/Configuration/Yaml/default.yaml"
+  -
+    resource: 'EXT:vdi/Configuration/Routes/Default.yaml'
+  -
+    resource: 'EXT:vdi_events/Configuration/Routes/Default.yaml'
+  -
+    resource: 'EXT:vdi_guidelines/Configuration/Routes/Default.yaml'
+  -
+    resource: 'EXT:vdi_myvdi_bonuscatalog/Configuration/Routes/Default.yaml'
+  -
+    resource: 'EXT:vdi_project_management/Configuration/Routes/Default.yaml'
+  -
+    resource: 'EXT:vdi_publications/Configuration/Routes/Default.yaml'
+  -
+    resource: 'EXT:vdi_value_management/Configuration/Routes/Default.yaml'

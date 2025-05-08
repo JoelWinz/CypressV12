@@ -1,0 +1,45 @@
+base: 'https://blog.vdi.de/'
+baseVariants:
+  -
+    base: 'https://blog-12-staging.vdi.de/'
+    condition: 'getenv("ENVIRONMENT") == "STAGE"'
+  -
+    base: 'https://blog.vdi-website-v12.ddev.site/'
+    condition: 'getenv("ENVIRONMENT") == "DDEV"'
+errorHandling:
+  -
+    errorCode: 404
+    errorHandler: Page
+    errorContentSource: 't3://page?uid=8338'
+flux_content_types: ''
+flux_page_templates: ''
+languages:
+  -
+    title: German
+    enabled: true
+    base: /
+    typo3Language: de
+    locale: de_DE
+    iso-639-1: de
+    navigationTitle: German
+    hreflang: de-DE
+    direction: ltr
+    flag: de
+    languageId: 0
+    solr_core_read: core_de
+rootPageId: 5587
+routeEnhancers:
+  PageTypeSuffix:
+    type: PageType
+    index: ''
+    map:
+      rss.xml: 200
+      /: 0
+      sitemap.xml: 1533906435
+solr_enabled_read: true
+solr_host_read: '%env(EXTENSIONS_SOLR_HOST)%'
+solr_path_read: '%env(EXTENSIONS_SOLR_PATH)%'
+solr_port_read: '%env(EXTENSIONS_SOLR_PORT)%'
+solr_scheme_read: '%env(EXTENSIONS_SOLR_SCHEME)%'
+solr_use_write_connection: false
+websiteTitle: ''

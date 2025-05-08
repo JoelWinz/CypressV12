@@ -1,0 +1,63 @@
+base: 'https://www.bienabest.de/'
+baseVariants:
+  -
+    base: 'https://bienabest-12-staging.vdi.de/'
+    condition: 'getenv("ENVIRONMENT") == "STAGE"'
+flux_content_types: ''
+flux_page_templates: ''
+languages:
+  -
+    title: German
+    enabled: true
+    languageId: 0
+    base: /
+    typo3Language: de
+    locale: de_DE
+    iso-639-1: de
+    navigationTitle: DE
+    hreflang: de-DE
+    direction: ltr
+    flag: de
+    solr_core_read: core_de
+rootPageId: 5659
+routeEnhancers:
+  NewsPlugin:
+    type: Extbase
+    limitToPages:
+      - 5823
+      - 9454
+    extension: News
+    plugin: Pi1
+    routes:
+      -
+        routePath: '/seite/{page}'
+        _controller: 'News::list'
+        _arguments:
+          page: '@widget_0/currentPage'
+      -
+        routePath: '{news_title}'
+        _controller: 'News::detail'
+        _arguments:
+          news_title: news
+    defaultController: 'News::list'
+    defaults:
+      page: '0'
+    requirements:
+      page: \d+
+    aspects:
+      page:
+        type: StaticRangeMapper
+        start: '1'
+        end: '1000'
+      news_title:
+        type: PersistedPatternMapper
+        tableName: tx_news_domain_model_news
+        routeFieldPattern: '^(?P<path_segment>.+)$'
+        routeFieldResult: '{path_segment}'
+solr_enabled_read: true
+solr_host_read: '%env(EXTENSIONS_SOLR_HOST)%'
+solr_path_read: '%env(EXTENSIONS_SOLR_PATH)%'
+solr_port_read: '%env(EXTENSIONS_SOLR_PORT)%'
+solr_scheme_read: '%env(EXTENSIONS_SOLR_SCHEME)%'
+solr_use_write_connection: false
+websiteTitle: ''

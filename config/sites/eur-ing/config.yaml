@@ -1,0 +1,33 @@
+base: 'https://www.eur-ing.de/'
+baseVariants:
+  -
+    base: 'https://euring-staging-12.vdi.de/'
+    condition: 'getenv("ENVIRONMENT") == "STAGE"'
+  -
+    base: 'https://eur-ing.vdi-website-v12.ddev.site/'
+    condition: 'getenv("ENVIRONMENT") == "DDEV"'
+flux_content_types: ''
+flux_page_templates: ''
+languages:
+  -
+    title: German
+    enabled: true
+    base: /
+    typo3Language: de
+    locale: de_DE
+    iso-639-1: de
+    websiteTitle: ''
+    navigationTitle: DE
+    hreflang: de-DE
+    direction: ltr
+    flag: de
+    solr_core_read: ''
+    languageId: 0
+rootPageId: 6245
+solr_enabled_read: true
+solr_host_read: '%env(EXTENSIONS_SOLR_HOST)%'
+solr_path_read: '%env(EXTENSIONS_SOLR_PATH)%'
+solr_port_read: '%env(EXTENSIONS_SOLR_PORT)%'
+solr_scheme_read: '%env(EXTENSIONS_SOLR_SCHEME)%'
+solr_use_write_connection: false
+websiteTitle: eur-ing
